@@ -32,15 +32,23 @@ Map<String,Integer> measureRangeMap = new HashMap<String,Integer>();
 final int DEFAULT_CLOCK_MAX_RADIUS = 480; // default maximum radius of our clock ~ 240px for hour circle
 final int DEFAULT_MINUTES_RADIUS = 360; // default minute clock radius ~ 240px for min circle
 final int DEFAULT_SECONDS_RADIUS = 240; // default seconds clock radius ~ 120px for s circle 
+final int ALARM_BUTTON_LENGTH = 200;
+final int ALARM_BUTTON_HEIGHT = 50;
 // Some colors
 final int METALIC_SEEWEED = 0xff028090;
 final int PERSIAN_GREEN = 0xff00A896;
 final int CARIBBEAN_GREEN = 0xff02C39A;
 final int PALE_SPRING_BUD = 0xffF0F3BD;
+final int ALARM_COLOR_BUTTON = 0xff00E5E8;
+final int ALARM_COLOR_BUTTON_HOVERED = 0xff00C5C8;
+final int ALRAM_COLOR_BUTTON_PRESSED = 0xff007C77;
 // load the font
 PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
+final PVector ALARM_BUTTON_LOCATION = new PVector(1000, 200);
+boolean setAlarmPressed = false;
+boolean setAlarmHovered = false;
 SomeNewClock instance;
 
 public void setup() {
@@ -56,7 +64,34 @@ public void setup() {
 }
 
 public void draw() {
+    update(mouseX, mouseY);
+    drawAlarmButton();
     instance.drawClock();
+
+}
+
+public void drawAlarmButton() {
+    if(setAlarmHovered)
+        fill(ALARM_COLOR_BUTTON_HOVERED);
+    else if (setAlarmPressed) {
+        fill(ALRAM_COLOR_BUTTON_PRESSED);
+    } else
+        fill(ALARM_COLOR_BUTTON);
+    rect(ALARM_BUTTON_LOCATION.x, ALARM_BUTTON_LOCATION.y, ALARM_BUTTON_LENGTH, ALARM_BUTTON_HEIGHT);
+    textFont(raleway, 30);
+    fill(40);
+    text("SET ALARM", ALARM_BUTTON_LOCATION.x + 20, ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT - 10);
+}
+
+public void update(int x, int y) {
+    if(isOverButton(x, y))
+        setAlarmHovered = true;
+    else 
+        setAlarmHovered = false;
+}
+
+public boolean isOverButton(int x, int y) {
+    return x > ALARM_BUTTON_LOCATION.x && y > ALARM_BUTTON_LOCATION.y && x < ALARM_BUTTON_LOCATION.x + ALARM_BUTTON_LENGTH && y < ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT;
 }
 
 // public final class myTimeSource {

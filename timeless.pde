@@ -13,7 +13,7 @@ Map<String,Integer> measureRangeMap = new HashMap<String,Integer>();
 final int DEFAULT_CLOCK_MAX_RADIUS = 480; // default maximum radius of our clock ~ 240px for hour circle
 final int DEFAULT_MINUTES_RADIUS = 360; // default minute clock radius ~ 240px for min circle
 final int DEFAULT_SECONDS_RADIUS = 240; // default seconds clock radius ~ 120px for s circle 
-final int ALARM_BUTTON_LENGTH = 100;
+final int ALARM_BUTTON_LENGTH = 200;
 final int ALARM_BUTTON_HEIGHT = 50;
 // Some colors
 final color METALIC_SEEWEED = #028090;
@@ -27,7 +27,7 @@ final color ALRAM_COLOR_BUTTON_PRESSED = #007C77;
 PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
-final PVector ALARM_BUTTON_LOCATION = new PVector(1100, 200);
+final PVector ALARM_BUTTON_LOCATION = new PVector(1000, 200);
 boolean setAlarmPressed = false;
 boolean setAlarmHovered = false;
 SomeNewClock instance;
@@ -46,12 +46,29 @@ void setup() {
 
 void draw() {
     update(mouseX, mouseY);
+    drawAlarmButton();
     instance.drawClock();
+
+}
+
+void drawAlarmButton() {
+    if(setAlarmHovered)
+        fill(ALARM_COLOR_BUTTON_HOVERED);
+    else if (setAlarmPressed) {
+        fill(ALRAM_COLOR_BUTTON_PRESSED);
+    } else
+        fill(ALARM_COLOR_BUTTON);
+    rect(ALARM_BUTTON_LOCATION.x, ALARM_BUTTON_LOCATION.y, ALARM_BUTTON_LENGTH, ALARM_BUTTON_HEIGHT);
+    textFont(raleway, 30);
+    fill(40);
+    text("SET ALARM", ALARM_BUTTON_LOCATION.x + 20, ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT - 10);
 }
 
 void update(int x, int y) {
-    if(isOverButton)
-
+    if(isOverButton(x, y))
+        setAlarmHovered = true;
+    else 
+        setAlarmHovered = false;
 }
 
 boolean isOverButton(int x, int y) {
