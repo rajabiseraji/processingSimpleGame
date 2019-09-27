@@ -17,6 +17,8 @@ final color METALIC_SEEWEED = #028090;
 final color PERSIAN_GREEN = #00A896;
 final color CARIBBEAN_GREEN = #02C39A;
 final color PALE_SPRING_BUD = #F0F3BD;
+// load the font
+PFont raleway = loadFont("Raleway-Thin.ttf", 16);
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
 SomeNewClock instance;
@@ -86,7 +88,7 @@ class ClockCircle {
     private final int INDICATOR__LINE_HEIGHT = 5;
     private final float RADIUS_INCREMENT_STEP; // The step of incremenation of filled circles 
     private PVector CIRCLE_CENTER; // center coords of the circle
-    private final float rulerAngel; // The angle that ruler line will have with horizon
+    private final float angel; // angel between the lines
     final color textColor;
     final color innerFillColor; // fill color of inner circle that fills the outer one
     final color outerFillColor; // fill color of the outer circle
@@ -97,7 +99,7 @@ class ClockCircle {
 
     // first signature
     // timeUnit can be: h , m, s, ms represeting different times units
-    ClockCircle (String timeUnit, Map measureRangeMap, int maxRadius, int centerX, int centerY, float initialRadius, color innerFill, color outerFill, color textColor) {
+    ClockCircle (String timeUnit, Map measureRangeMap, int maxRadius, int centerX, int centerY, float initialRadius, color innerFill, color outerFill, color textColor, float angel) {
         int maxRange = (int) measureRangeMap.get(timeUnit); // get the corresponding number of each unit from the map 
         //if (maxRange && maxRadius) { // if time unit exists in the map
             this.MAX_RANGE = maxRange;
@@ -109,14 +111,14 @@ class ClockCircle {
             this.innerFillColor = innerFill;
             this.outerFillColor = outerFill;
             this.textColor = textColor;
-            this.rulerAngel = rulerAngel;
+            this.angel = angel;
             this.createRulerLine();
         //} 
     }
 
     // second signature
     // this one receives and sets the basic constant fields of the class
-    ClockCircle (int maxRange, int maxRadius, float centerX, float centerY, float initialRadius, color innerFill, color outerFill, color textColor, float rulerAngel) {
+    ClockCircle (int maxRange, int maxRadius, float centerX, float centerY, float initialRadius, color innerFill, color outerFill, color textColor, float angel) {
         this.MAX_RANGE = maxRange + 1;
         this.MAX_RADIUS = maxRadius;
         this.MIN_RADIUS = initialRadius;
@@ -126,7 +128,7 @@ class ClockCircle {
         this.innerFillColor = innerFill;
         this.outerFillColor = outerFill;
         this.textColor = textColor;
-        this.rulerAngel = rulerAngel;
+        this.angel = angel;
         this.createRulerLine();
     }
 
@@ -152,33 +154,6 @@ class ClockCircle {
         circleShape.addChild(outerCircle);
         circleShape.addChild(innerCircle);
         circleShape.addChild(this.ruler);
-    }
-
-    private void createRulerLine() {
-        strokeCap(SQUARE);
-        stroke(this.textColor);
-        float lineEndX = this.CIRCLE_CENTER.x + (this.MAX_RADIUS * cos(this.rulerAngel));
-        float lineEndY = this.CIRCLE_CENTER.y - (this.MAX_RADIUS * sin(this.rulerAngel));
-        println("lineEndX: "+lineEndX);
-        println("lineEndY: "+lineEndY);
-        float lineBeginX = this.CIRCLE_CENTER.x + (this.MIN_RADIUS * cos(this.rulerAngel));
-        float lineBeginY = this.CIRCLE_CENTER.y - (this.MIN_RADIUS * sin(this.rulerAngel));
-        ruler = createShape(GROUP);
-        PShape rulerLine = createShape(LINE, this.CIRCLE_CENTER.x, this.CIRCLE_CENTER.y, lineEndX, lineEndY);
-        ruler.addChild(rulerLine);
-        float x = lineBeginX;
-        float y = lineBeginY;
-        int i = 0;
-        while (i < this.MAX_RANGE) {
-            float indicatorEndX = x - (INDICATOR__LINE_HEIGHT * sin(this.rulerAngel));
-            float indicatorEndY = y - (INDICATOR__LINE_HEIGHT * cos(this.rulerAngel));
-            PShape indicator = createShape(LINE, x, y, indicatorEndX, indicatorEndY);
-            ruler.addChild(indicator);
-            x += RADIUS_INCREMENT_STEP * cos(this.rulerAngel);
-            y -= RADIUS_INCREMENT_STEP * sin(this.rulerAngel);
-            i++;
-        }
-        println("i: "+i);
     }
 
     public PShape updateClock(int newValue) {
