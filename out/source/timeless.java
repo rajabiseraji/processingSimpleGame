@@ -93,13 +93,13 @@ class SomeNewClock {
         ourClock.addChild(secondCircle.updateClock(second()));
         // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
-        textFont(raleway, 30);
-        fill(40);
-        text(second(), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
-        textFont(raleway, 40);
-        text(minute(), minCircle.getNumberLocation().x, minCircle.getNumberLocation().y);
         textFont(raleway, 50);
-        text(hour(), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
+        fill(40);
+        text(String.format("%02d", second()), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
+        textFont(raleway, 60);
+        text(String.format("%02d", minute()), minCircle.getNumberLocation().x, minCircle.getNumberLocation().y);
+        textFont(raleway, 70);
+        text(String.format("%02d", hour()), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
     }
 }
 
@@ -177,7 +177,7 @@ class ClockCircle {
     }
 
     public PVector getNumberLocation() {
-        float numberXPostion = this.CIRCLE_CENTER.x - 10;
+        float numberXPostion = this.CIRCLE_CENTER.x - 30;
         float numberYPostion = this.CIRCLE_CENTER.y - this.MAX_RADIUS + ((this.MAX_RADIUS - this.MIN_RADIUS) / 2);
         return new PVector(numberXPostion, numberYPostion);
     }
