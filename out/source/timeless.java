@@ -177,8 +177,8 @@ class ClockCircle {
     }
 
     public PVector getNumberLocation() {
-        float numberXPostion = this.CIRCLE_CENTER.x + ((this.currentRadius - 10) * cos(this.angel));
-        float numberYPostion = this.CIRCLE_CENTER.y - ((this.currentRadius - 10) * sin(this.angel));
+        float numberXPostion = this.CIRCLE_CENTER.x - 10;
+        float numberYPostion = this.CIRCLE_CENTER.y - this.MAX_RADIUS + ((this.MAX_RADIUS - this.MIN_RADIUS) / 2);
         return new PVector(numberXPostion, numberYPostion);
     }
 
