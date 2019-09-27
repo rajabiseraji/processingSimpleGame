@@ -13,21 +13,29 @@ Map<String,Integer> measureRangeMap = new HashMap<String,Integer>();
 final int DEFAULT_CLOCK_MAX_RADIUS = 480; // default maximum radius of our clock ~ 240px for hour circle
 final int DEFAULT_MINUTES_RADIUS = 360; // default minute clock radius ~ 240px for min circle
 final int DEFAULT_SECONDS_RADIUS = 240; // default seconds clock radius ~ 120px for s circle 
+final int ALARM_BUTTON_LENGTH = 100;
+final int ALARM_BUTTON_HEIGHT = 50;
 // Some colors
 final color METALIC_SEEWEED = #028090;
 final color PERSIAN_GREEN = #00A896;
 final color CARIBBEAN_GREEN = #02C39A;
 final color PALE_SPRING_BUD = #F0F3BD;
+final color ALARM_COLOR_BUTTON = #00E5E8;
+final color ALARM_COLOR_BUTTON_HOVERED = #00C5C8;
+final color ALRAM_COLOR_BUTTON_PRESSED = #007C77;
 // load the font
 PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
+final PVector ALARM_BUTTON_LOCATION = new PVector(1100, 200);
+boolean setAlarmPressed = false;
+boolean setAlarmHovered = false;
 SomeNewClock instance;
 
 void setup() {
     background(#05668d);
     raleway = createFont("Raleway-Thin.ttf", 16);
-    size(1000, 1000);
+    size(1200, 1000);
     measureRangeMap.put("h", 23);
     measureRangeMap.put("m", 59);
     measureRangeMap.put("s", 59);
@@ -37,7 +45,17 @@ void setup() {
 }
 
 void draw() {
+    update(mouseX, mouseY);
     instance.drawClock();
+}
+
+void update(int x, int y) {
+    if(isOverButton)
+
+}
+
+boolean isOverButton(int x, int y) {
+    return x > ALARM_BUTTON_LOCATION.x && y > ALARM_BUTTON_LOCATION.y && x < ALARM_BUTTON_LOCATION.x + ALARM_BUTTON_LENGTH && y < ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT;
 }
 
 // public final class myTimeSource {

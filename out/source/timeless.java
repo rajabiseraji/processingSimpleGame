@@ -116,7 +116,6 @@ class SomeNewClock {
         ourClock.addChild(hourCircle.updateClock(hour()));
         ourClock.addChild(minCircle.updateClock(minute()));
         ourClock.addChild(secondCircle.updateClock(second()));
-        // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
         drawNumbers();
     }
@@ -231,7 +230,7 @@ class ClockCircle {
 
 
 
-  public void settings() {  size(1000, 1000);  smooth(4); }
+  public void settings() {  size(1200, 1000);  smooth(4); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "timeless" };
     if (passedArgs != null) {
