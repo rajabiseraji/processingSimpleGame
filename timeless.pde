@@ -7,6 +7,7 @@
 **/
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 Map<String,Integer> measureRangeMap = new HashMap<String,Integer>();
 final int DEFAULT_CLOCK_MAX_RADIUS = 480; // default maximum radius of our clock ~ 240px for hour circle
@@ -39,6 +40,12 @@ void draw() {
     instance.drawClock();
 }
 
+// public final class myTimeSource {
+//     public int seconds() {
+//         return 
+//     }
+// } 
+
 class SomeNewClock {
     private int alarmSec = 0;
     private int alarmMin = 0;
@@ -62,14 +69,14 @@ class SomeNewClock {
         secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
     }
 
-    SomeNewClock(int minute, int second, int hour) {
-        this.s = second;
-        this.m = minute;
-        this.h = hour;
-        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
-        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
-        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
-    }
+    // SomeNewClock(int minute, int second, int hour) {
+    //     this.s = second;
+    //     this.m = minute;
+    //     this.h = hour;
+    //     hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+    //     minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+    //     secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
+    // }
 
     public void setAlarm() {
 
@@ -87,9 +94,9 @@ class SomeNewClock {
 
     public void drawClock() {
         ourClock = createShape(GROUP);
-        ourClock.addChild(hourCircle.updateClock(this.h);
-        ourClock.addChild(minCircle.updateClock(this.m);
-        ourClock.addChild(secondCircle.updateClock(this.s));
+        ourClock.addChild(hourCircle.updateClock(hour()));
+        ourClock.addChild(minCircle.updateClock(minute()));
+        ourClock.addChild(secondCircle.updateClock(second()));
         // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
         drawNumbers();
