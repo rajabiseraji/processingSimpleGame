@@ -97,7 +97,6 @@ class SomeNewClock {
         ourClock.addChild(hourCircle.updateClock(hour()));
         ourClock.addChild(minCircle.updateClock(minute()));
         ourClock.addChild(secondCircle.updateClock(second()));
-        // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
         drawNumbers();
     }
