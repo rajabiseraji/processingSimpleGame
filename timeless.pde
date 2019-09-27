@@ -57,24 +57,25 @@ class SomeNewClock {
         this.s = second();
         this.m = minute();
         this.h = hour();
-        // this.ms = millis();
         hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
         minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
         secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
-        // msCircle = new ClockCircle(99, DEFAULT_MILISECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, color(255,0,255), color(120), color(40), radians(180));
+    }
+
+    SomeNewClock(int minute, int second, int hour) {
+        this.s = second;
+        this.m = minute;
+        this.h = hour;
+        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
     }
 
     public void setAlarm() {
 
     }
 
-    public void drawClock() {
-        ourClock = createShape(GROUP);
-        ourClock.addChild(hourCircle.updateClock(hour()));
-        ourClock.addChild(minCircle.updateClock(minute()));
-        ourClock.addChild(secondCircle.updateClock(second()));
-        // ourClock.addChild(msCircle.updateClock(millis()));
-        shape(ourClock);
+    private void drawNumbers() {
         textFont(raleway, 50);
         fill(40);
         text(String.format("%02d", second()), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
@@ -82,6 +83,16 @@ class SomeNewClock {
         text(String.format("%02d", minute()), minCircle.getNumberLocation().x, minCircle.getNumberLocation().y);
         textFont(raleway, 70);
         text(String.format("%02d", hour()), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
+    }
+
+    public void drawClock() {
+        ourClock = createShape(GROUP);
+        ourClock.addChild(hourCircle.updateClock(this.h);
+        ourClock.addChild(minCircle.updateClock(this.m);
+        ourClock.addChild(secondCircle.updateClock(this.s));
+        // ourClock.addChild(msCircle.updateClock(millis()));
+        shape(ourClock);
+        drawNumbers();
     }
 }
 
