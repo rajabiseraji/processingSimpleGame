@@ -18,13 +18,14 @@ final color PERSIAN_GREEN = #00A896;
 final color CARIBBEAN_GREEN = #02C39A;
 final color PALE_SPRING_BUD = #F0F3BD;
 // load the font
-PFont raleway = loadFont("Raleway-Thin.ttf", 16);
+PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
 SomeNewClock instance;
 
 void setup() {
     background(#05668d);
+    raleway = createFont("Raleway-Thin.ttf", 16);
     size(1000, 1000);
     measureRangeMap.put("h", 23);
     measureRangeMap.put("m", 59);
@@ -57,9 +58,9 @@ class SomeNewClock {
         this.m = minute();
         this.h = hour();
         // this.ms = millis();
-        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40));
-        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40);
-        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40);
+        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(0));
+        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(60));
+        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(90));
         // msCircle = new ClockCircle(99, DEFAULT_MILISECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, color(255,0,255), color(120), color(40), radians(180));
     }
 
@@ -69,12 +70,14 @@ class SomeNewClock {
 
     public void drawClock() {
         ourClock = createShape(GROUP);
-        // hourCircle.updateClock(hour());
         ourClock.addChild(hourCircle.updateClock(hour()));
         ourClock.addChild(minCircle.updateClock(minute()));
         ourClock.addChild(secondCircle.updateClock(second()));
         // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
+        textFont(raleway, 40);
+        fill(40);
+        text(second(), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
     }
 }
 
@@ -85,7 +88,6 @@ class ClockCircle {
     private final int MAX_RANGE; // maximum value this circle can represent
     private final float MAX_RADIUS; // radius of the biggest filled circle inside this circle
     private final float MIN_RADIUS; // radius of the smallest filled circle inside this circle
-    private final int INDICATOR__LINE_HEIGHT = 5;
     private final float RADIUS_INCREMENT_STEP; // The step of incremenation of filled circles 
     private PVector CIRCLE_CENTER; // center coords of the circle
     private final float angel; // angel between the lines
@@ -95,7 +97,6 @@ class ClockCircle {
     private int currentValue = 0; // current represented value by the circle, initially 0
     private float currentRadius; // current radius that corresponds to current value
     private PShape circleShape; // this is the geometrical representation of the clock circle
-    private PShape ruler;
 
     // first signature
     // timeUnit can be: h , m, s, ms represeting different times units
@@ -112,7 +113,6 @@ class ClockCircle {
             this.outerFillColor = outerFill;
             this.textColor = textColor;
             this.angel = angel;
-            this.createRulerLine();
         //} 
     }
 
@@ -129,7 +129,6 @@ class ClockCircle {
         this.outerFillColor = outerFill;
         this.textColor = textColor;
         this.angel = angel;
-        this.createRulerLine();
     }
 
     // This version will be used by external functions to set the fields value and radius
@@ -153,7 +152,12 @@ class ClockCircle {
         innerCircle.setFill(innerFillColor);
         circleShape.addChild(outerCircle);
         circleShape.addChild(innerCircle);
-        circleShape.addChild(this.ruler);
+    }
+
+    public PVector getNumberLocation() {
+        float numberXPostion = this.CIRCLE_CENTER.x + (this.MAX_RADIUS * cos(this.angel));
+        float numberYPostion = this.CIRCLE_CENTER.y - (this.MAX_RADIUS * sin(this.angel));
+        return new PVector(numberXPostion, numberYPostion);
     }
 
     public PShape updateClock(int newValue) {
