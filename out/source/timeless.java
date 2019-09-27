@@ -34,6 +34,7 @@ final int DEFAULT_MINUTES_RADIUS = 360; // default minute clock radius ~ 240px f
 final int DEFAULT_SECONDS_RADIUS = 240; // default seconds clock radius ~ 120px for s circle 
 final int ALARM_BUTTON_LENGTH = 200;
 final int ALARM_BUTTON_HEIGHT = 50;
+final int ALARM_BUTTON_CORNER_RADIUS = 8;
 // Some colors
 final int METALIC_SEEWEED = 0xff028090;
 final int PERSIAN_GREEN = 0xff00A896;
@@ -46,7 +47,7 @@ final int ALRAM_COLOR_BUTTON_PRESSED = 0xff007C77;
 PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
-final PVector ALARM_BUTTON_LOCATION = new PVector(1000, 200);
+final PVector ALARM_BUTTON_LOCATION = new PVector(950, 200);
 boolean setAlarmPressed = false;
 boolean setAlarmHovered = false;
 SomeNewClock instance;
@@ -71,16 +72,16 @@ public void draw() {
 }
 
 public void drawAlarmButton() {
-    if(setAlarmHovered)
-        fill(ALARM_COLOR_BUTTON_HOVERED);
-    else if (setAlarmPressed) {
+    if(setAlarmPressed)
         fill(ALRAM_COLOR_BUTTON_PRESSED);
+    else if (setAlarmHovered) {
+        fill(ALARM_COLOR_BUTTON_HOVERED);
     } else
         fill(ALARM_COLOR_BUTTON);
-    rect(ALARM_BUTTON_LOCATION.x, ALARM_BUTTON_LOCATION.y, ALARM_BUTTON_LENGTH, ALARM_BUTTON_HEIGHT);
+    rect(ALARM_BUTTON_LOCATION.x, ALARM_BUTTON_LOCATION.y, ALARM_BUTTON_LENGTH, ALARM_BUTTON_HEIGHT, ALARM_BUTTON_CORNER_RADIUS);
     textFont(raleway, 30);
     fill(40);
-    text("SET ALARM", ALARM_BUTTON_LOCATION.x + 20, ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT - 10);
+    text("SET ALARM", ALARM_BUTTON_LOCATION.x + 20, ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT - 15);
 }
 
 public void update(int x, int y) {
@@ -88,6 +89,15 @@ public void update(int x, int y) {
         setAlarmHovered = true;
     else 
         setAlarmHovered = false;
+}
+
+public void mouseClicked(MouseEvent event) {
+    int x = event.getX();
+    int y = event.getY();
+    if(isOverButton(x, y) && !setAlarmPressed)
+        setAlarmPressed = true;
+    else 
+        setAlarmPressed = false;
 }
 
 public boolean isOverButton(int x, int y) {
