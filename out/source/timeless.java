@@ -76,9 +76,9 @@ class SomeNewClock {
         this.m = minute();
         this.h = hour();
         // this.ms = millis();
-        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(0));
-        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(60));
-        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(90));
+        hourCircle = new ClockCircle(23, DEFAULT_CLOCK_MAX_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_MINUTES_RADIUS, PERSIAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+        minCircle = new ClockCircle(59, DEFAULT_MINUTES_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, DEFAULT_SECONDS_RADIUS, CARIBBEAN_GREEN, METALIC_SEEWEED, color(40), radians(98));
+        secondCircle = new ClockCircle(59, DEFAULT_SECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, PALE_SPRING_BUD, METALIC_SEEWEED, color(40), radians(98));
         // msCircle = new ClockCircle(99, DEFAULT_MILISECONDS_RADIUS, DEFAULT_CLOCK_CENTER.x, DEFAULT_CLOCK_CENTER.y, 0, color(255,0,255), color(120), color(40), radians(180));
     }
 
@@ -93,9 +93,13 @@ class SomeNewClock {
         ourClock.addChild(secondCircle.updateClock(second()));
         // ourClock.addChild(msCircle.updateClock(millis()));
         shape(ourClock);
-        textFont(raleway, 40);
+        textFont(raleway, 30);
         fill(40);
         text(second(), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
+        textFont(raleway, 40);
+        text(minute(), minCircle.getNumberLocation().x, minCircle.getNumberLocation().y);
+        textFont(raleway, 50);
+        text(hour(), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
     }
 }
 
@@ -173,8 +177,8 @@ class ClockCircle {
     }
 
     public PVector getNumberLocation() {
-        float numberXPostion = this.CIRCLE_CENTER.x + (this.MAX_RADIUS * cos(this.angel));
-        float numberYPostion = this.CIRCLE_CENTER.y - (this.MAX_RADIUS * sin(this.angel));
+        float numberXPostion = this.CIRCLE_CENTER.x + ((this.currentRadius - 10) * cos(this.angel));
+        float numberYPostion = this.CIRCLE_CENTER.y - ((this.currentRadius - 10) * sin(this.angel));
         return new PVector(numberXPostion, numberYPostion);
     }
 
