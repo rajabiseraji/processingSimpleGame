@@ -29,6 +29,7 @@ PFont raleway;
 // final int DEFAULT_MILISECONDS_RADIUS = 20; // default seconds clock radius ~ 20 for ms circle 
 final PVector DEFAULT_CLOCK_CENTER = new PVector(500 ,500);
 final PVector ALARM_BUTTON_LOCATION = new PVector(950, 200);
+// final PVector MOUSE_CLICKED_LOCATION;
 boolean setAlarmPressed = false;
 boolean setAlarmHovered = false;
 SomeNewClock instance;
@@ -77,19 +78,14 @@ void mouseClicked(MouseEvent event) {
     int y = event.getY();
     if(isOverButton(x, y) && !setAlarmPressed)
         setAlarmPressed = true;
-    else 
+    else if (isOverButton(x, y))
         setAlarmPressed = false;
+    // if()
 }
 
 boolean isOverButton(int x, int y) {
     return x > ALARM_BUTTON_LOCATION.x && y > ALARM_BUTTON_LOCATION.y && x < ALARM_BUTTON_LOCATION.x + ALARM_BUTTON_LENGTH && y < ALARM_BUTTON_LOCATION.y + ALARM_BUTTON_HEIGHT;
 }
-
-// public final class myTimeSource {
-//     public int seconds() {
-//         return 
-//     }
-// } 
 
 class SomeNewClock {
     private int alarmSec = 0;
@@ -137,13 +133,30 @@ class SomeNewClock {
         text(String.format("%02d", hour()), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
     }
 
+    private void drawNumbers(boolean mode) {
+        textFont(raleway, 50);
+        fill(40);
+        text(String.format("%02d", secondCircle.getCurrentValue()), secondCircle.getNumberLocation().x, secondCircle.getNumberLocation().y);
+        textFont(raleway, 60);
+        text(String.format("%02d", minCircle.getCurrentValue()), minCircle.getNumberLocation().x, minCircle.getNumberLocation().y);
+        textFont(raleway, 70);
+        text(String.format("%02d", hourCircle.getCurrentValue()), hourCircle.getNumberLocation().x, hourCircle.getNumberLocation().y);
+    }
+
     public void drawClock() {
         ourClock = createShape(GROUP);
-        ourClock.addChild(hourCircle.updateClock(hour()));
-        ourClock.addChild(minCircle.updateClock(minute()));
-        ourClock.addChild(secondCircle.updateClock(second()));
-        shape(ourClock);
-        drawNumbers();
+        if (!setAlarmPressed) {
+            ourClock.addChild(hourCircle.updateClock(hour()));
+            ourClock.addChild(minCircle.updateClock(minute()));
+            ourClock.addChild(secondCircle.updateClock(second()));
+            shape(ourClock);
+            drawNumbers();
+        } else {
+            shape(hourCircle.setValue(mouseX, mouseY, true));
+            shape(minCircle.setValue(mouseX, mouseY, true));
+            shape(secondCircle.setValue(mouseX, mouseY, true));
+            drawNumbers(true);
+        }
     }
 }
 
@@ -163,7 +176,7 @@ class ClockCircle {
     private int currentValue = 0; // current represented value by the circle, initially 0
     private float currentRadius; // current radius that corresponds to current value
     private PShape circleShape; // this is the geometrical representation of the clock circle
-
+    private boolean alarmMode = false;
     // first signature
     // timeUnit can be: h , m, s, ms represeting different times units
     ClockCircle (String timeUnit, Map measureRangeMap, int maxRadius, int centerX, int centerY, float initialRadius, color innerFill, color outerFill, color textColor, float angel) {
@@ -204,8 +217,15 @@ class ClockCircle {
     }
 
     // This version uses an X and Y position to find the interaction and then sets the values
-    public void setValue(float positionX, float positionY) {
-
+    public PShape setValue(float positionX, float positionY, boolean dummy) {
+        float distance = sqrt(pow(positionX - this.CIRCLE_CENTER.x, 2) + pow(positionY - this.CIRCLE_CENTER.y, 2));
+        if (distance <= this.MAX_RADIUS && distance > this.MIN_RADIUS) {
+            this.setCurrentRadius(distance);
+            int newValue = floor((distance - this.MIN_RADIUS) / RADIUS_INCREMENT_STEP);
+            this.setCurrentValue(newValue);
+            this.createCircleShape();
+        }
+        return this.circleShape;
     }
 
     private void createCircleShape() {
@@ -251,6 +271,14 @@ class ClockCircle {
 
     public float getCurrentRadius() {
         return this.currentRadius;
+    }
+
+    public void toggleAlarmMode() {
+        this.alarmMode = !this.alarmMode;
+    }
+
+    public boolean getAlarmMode() {
+        return this.alarmMode;
     }
 }
 
