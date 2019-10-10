@@ -84,6 +84,7 @@ public class TextBubble implements Displayable {
     int maxTime = 0; // miliseconds
     int maxTimePerWord = 500; // ms
     boolean isClosing = false;
+    boolean isFinished = false;
 
     TextBubble(String initText, PFont textFont, int maxTimePerWord, PVector position) {
         this.textFont = textFont;
@@ -105,13 +106,24 @@ public class TextBubble implements Displayable {
             this.currentCharIndex++;
         else if(this.isClosing && this.currentCharIndex > 0)
             this.currentCharIndex--;
+
+        if(this.currentCharIndex == 0 && this.isClosing)
+            this.isFinished = true;
         this.currentText = this.finalText.substring(0, this.currentCharIndex);
         display();
     }
 
     public void setText(String newText) {
+        this.startTime = millis();
         this.finalText = newText;
+        this.currentText = this.finalText.substring(0, this.currentCharIndex);
+        this.maxTime = this.finalText.split(" ").length * maxTimePerWord;
         this.isClosing = false;
+        this.isFinished = false;
+    }
+
+    public boolean isItFinshed() {
+        return this.isFinished;
     }
 
     public void display() {
@@ -127,18 +139,29 @@ public class TextBubble implements Displayable {
 PaintingCanvas p;
 TextBubble t;
 PFont minecraft;
+String[] texts = new String[3];
+int currentStringIndex = 0;
+
 void setup() {
     size(1000, 600);
     minecraft = createFont("Minecraft.ttf", 24);
     // textFont(minecraft);
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
-    t = new TextBubble("Okay, now that you've seen it all, you know there's nothing here right? ", minecraft, 1000, new PVector(20, height-40));
+    texts[0] = "Okay, now that you've seen it all, you know there's nothing here right? ";
+    texts[1] = "Well I'm back in white too! You caused me a lot of troubles though!";
+    texts[2] = "so get the hell out of here!";
+    t = new TextBubble(texts[0], minecraft, 1000, new PVector(20, height-40));
 }
 
 void draw() {
     p.display();
     t.updateText();
+    if(t.isItFinshed()) {
+        currentStringIndex++;
+        t.setText(texts[currentStringIndex]);
+    }
+
 }
 
 void mouseDragged(MouseEvent event){
