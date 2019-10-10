@@ -77,9 +77,9 @@ public class TextBubble implements Displayable {
     PShape bubble;
     PFont textFont;
     PVector position;
-    String currentText;
+    String currentText, finalText;
     int currentCharIndex = 0;
-    float elapsedTime = 0; // ms
+    int elapsedTime = 0; // ms
     int startTime = 0; // ms
     int maxTime = 0; // miliseconds
     int maxTimePerWord = 500; // ms
@@ -88,9 +88,10 @@ public class TextBubble implements Displayable {
     TextBubble(String initText, PFont textFont, int maxTimePerWord, PVector position) {
         this.textFont = textFont;
         textFont(textFont);
-        this.currentText = initText;
+        this.finalText = initText;
+        this.currentText = this.finalText.substring(0, this.currentCharIndex);
         this.maxTimePerWord = maxTimePerWord;
-        this.maxTime = this.currentText.split(" ").length * maxTimePerWord;
+        this.maxTime = this.finalText.split(" ").length * maxTimePerWord;
         this.position = position;
         this.startTime = millis();
     }
@@ -99,22 +100,22 @@ public class TextBubble implements Displayable {
         elapsedTime = millis() - this.startTime;
         if(elapsedTime >= maxTime)
             this.isClosing = true;
-
-        if(this.currentCharIndex < this.currentText.length() && !this.isClosing)
+        delay(50);
+        if(this.currentCharIndex < this.finalText.length() && !this.isClosing)
             this.currentCharIndex++;
         else if(this.isClosing && this.currentCharIndex > 0)
             this.currentCharIndex--;
-
+        this.currentText = this.finalText.substring(0, this.currentCharIndex);
         display();
     }
 
     public void setText(String newText) {
-        this.currentText = newText;
+        this.finalText = newText;
         this.isClosing = false;
     }
 
     public void display() {
-        text(this.currentText, 0, this.currentCharIndex, this.position.x, this.position.y);
+        text(this.currentText, this.position.x, this.position.y);
     }
 
     public PShape getShape() {
@@ -127,11 +128,11 @@ TextBubble t;
 PFont minecraft;
 void setup() {
     size(400, 500);
-    minecraft = createFont("Minecraft.ttf", 16);
+    minecraft = createFont("Minecraft.ttf", 24);
     // textFont(minecraft);
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
-    t = new TextBubble("hey what are you doing!", minecraft, 100, new PVector(20, height-40));
+    t = new TextBubble("Okay, now that you've seen it all, you know there's nothing here right? ", minecraft, 1000, new PVector(20, height-40));
 }
 
 void draw() {

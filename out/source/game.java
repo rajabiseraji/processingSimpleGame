@@ -89,15 +89,71 @@ public class PaintingCanvas implements Displayable, Clickable {
 
 }
 
+public class TextBubble implements Displayable {
+    PShape bubble;
+    PFont textFont;
+    PVector position;
+    String currentText, finalText;
+    int currentCharIndex = 0;
+    int elapsedTime = 0; // ms
+    int startTime = 0; // ms
+    int maxTime = 0; // miliseconds
+    int maxTimePerWord = 500; // ms
+    boolean isClosing = false;
+
+    TextBubble(String initText, PFont textFont, int maxTimePerWord, PVector position) {
+        this.textFont = textFont;
+        textFont(textFont);
+        this.finalText = initText;
+        this.currentText = this.finalText.substring(0, this.currentCharIndex);
+        this.maxTimePerWord = maxTimePerWord;
+        this.maxTime = this.finalText.split(" ").length * maxTimePerWord;
+        this.position = position;
+        this.startTime = millis();
+    }
+
+    public void updateText() {
+        elapsedTime = millis() - this.startTime;
+        if(elapsedTime >= maxTime)
+            this.isClosing = true;
+        delay(50);
+        if(this.currentCharIndex < this.finalText.length() && !this.isClosing)
+            this.currentCharIndex++;
+        else if(this.isClosing && this.currentCharIndex > 0)
+            this.currentCharIndex--;
+        this.currentText = this.finalText.substring(0, this.currentCharIndex);
+        display();
+    }
+
+    public void setText(String newText) {
+        this.finalText = newText;
+        this.isClosing = false;
+    }
+
+    public void display() {
+        text(this.currentText, this.position.x, this.position.y);
+    }
+
+    public PShape getShape() {
+        return this.bubble;
+    }
+}
+
 PaintingCanvas p;
+TextBubble t;
+PFont minecraft;
 public void setup() {
     
+    minecraft = createFont("Minecraft.ttf", 24);
+    // textFont(minecraft);
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
+    t = new TextBubble("Okay, now that you've seen it all, you know there's nothing here right? ", minecraft, 2000, new PVector(20, height-40));
 }
 
 public void draw() {
     p.display();
+    t.updateText();
 }
 
 public void mouseDragged(MouseEvent event){
