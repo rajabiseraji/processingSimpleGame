@@ -73,15 +73,70 @@ public class PaintingCanvas implements Displayable, Clickable {
 
 }
 
+public class TextBubble implements Displayable {
+    PShape bubble;
+    PFont textFont;
+    PVector position;
+    String currentText;
+    int currentCharIndex = 0;
+    float elapsedTime = 0; // ms
+    int startTime = 0; // ms
+    int maxTime = 0; // miliseconds
+    int maxTimePerWord = 500; // ms
+    boolean isClosing = false;
+
+    TextBubble(String initText, PFont textFont, int maxTimePerWord, PVector position) {
+        this.textFont = textFont;
+        textFont(textFont);
+        this.currentText = initText;
+        this.maxTimePerWord = maxTimePerWord;
+        this.maxTime = this.currentText.split(" ").length * maxTimePerWord;
+        this.position = position;
+        this.startTime = millis();
+    }
+
+    public void updateText() {
+        elapsedTime = millis() - this.startTime;
+        if(elapsedTime >= maxTime)
+            this.isClosing = true;
+
+        if(this.currentCharIndex < this.currentText.length() && !this.isClosing)
+            this.currentCharIndex++;
+        else if(this.isClosing && this.currentCharIndex > 0)
+            this.currentCharIndex--;
+
+        display();
+    }
+
+    public void setText(String newText) {
+        this.currentText = newText;
+        this.isClosing = false;
+    }
+
+    public void display() {
+        text(this.currentText, 0, this.currentCharIndex, this.position.x, this.position.y);
+    }
+
+    public PShape getShape() {
+        return this.bubble;
+    }
+}
+
 PaintingCanvas p;
+TextBubble t;
+PFont minecraft;
 void setup() {
     size(400, 500);
+    minecraft = createFont("Minecraft.ttf", 16);
+    // textFont(minecraft);
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
+    t = new TextBubble("hey what are you doing!", minecraft, 100, new PVector(20, height-40));
 }
 
 void draw() {
     p.display();
+    t.updateText();
 }
 
 void mouseDragged(MouseEvent event){
