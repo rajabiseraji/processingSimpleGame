@@ -131,7 +131,8 @@ public class TextBubble implements Displayable {
     }
 
     public void display() {
-        text(this.currentText, this.position.x, this.position.y);
+        float textXPostion = (width - 20 - textWidth(this.finalText)) / 2;
+        text(this.currentText, textXPostion, this.position.y, width - 20, height - 40);
     }
 
     public PShape getShape() {
@@ -148,7 +149,7 @@ public void setup() {
     // textFont(minecraft);
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
-    t = new TextBubble("Okay, now that you've seen it all, you know there's nothing here right? ", minecraft, 2000, new PVector(20, height-40));
+    t = new TextBubble("Okay, now that you've seen it all, you know there's nothing here right? ", minecraft, 1000, new PVector(20, height-40));
 }
 
 public void draw() {
@@ -165,7 +166,7 @@ public void mouseDragged(MouseEvent event){
 
 
 
-  public void settings() {  size(400, 500); }
+  public void settings() {  size(1000, 600); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "game" };
     if (passedArgs != null) {

@@ -115,7 +115,8 @@ public class TextBubble implements Displayable {
     }
 
     public void display() {
-        text(this.currentText, this.position.x, this.position.y);
+        float textXPostion = (width - 20 - textWidth(this.finalText)) / 2;
+        text(this.currentText, textXPostion, this.position.y, width - 20, height - 40);
     }
 
     public PShape getShape() {
@@ -127,7 +128,7 @@ PaintingCanvas p;
 TextBubble t;
 PFont minecraft;
 void setup() {
-    size(400, 500);
+    size(1000, 600);
     minecraft = createFont("Minecraft.ttf", 24);
     // textFont(minecraft);
     frameRate(60);
