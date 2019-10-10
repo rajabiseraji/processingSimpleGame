@@ -1,3 +1,19 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class game extends PApplet {
+
 /**
 * timeless (second edition!)
 * Mohammad Rajabi Seraji
@@ -24,12 +40,12 @@ minecraft = createFont("Raleway-Thin.ttf", 16);
 
 // Any subclass should implement the display method
 interface Displayable {
-    PShape getShape();
-    void display();
+    public PShape getShape();
+    public void display();
 }
 
 interface Clickable {
-    void handleClick(MouseEvent event); 
+    public void handleClick(MouseEvent event); 
 }
 
 // Let's create a black painting page
@@ -74,17 +90,17 @@ public class PaintingCanvas implements Displayable, Clickable {
 }
 
 PaintingCanvas p;
-void setup() {
-    size(400, 500);
+public void setup() {
+    
     frameRate(60);
     p = new PaintingCanvas(height, width, 40, new PVector(0, 0), true);
 }
 
-void draw() {
+public void draw() {
     p.display();
 }
 
-void mouseDragged(MouseEvent event){
+public void mouseDragged(MouseEvent event){
     p.handleClick(event);
 }
 
@@ -93,3 +109,13 @@ void mouseDragged(MouseEvent event){
 
 
 
+  public void settings() {  size(400, 500); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "game" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
+}
