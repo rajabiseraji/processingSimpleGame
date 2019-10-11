@@ -22,8 +22,6 @@ PFont raleway;
 minecraft = createFont("Raleway-Thin.ttf", 16);
  */
 
-
-
 PaintingCanvas p;
 TextBubble t;
 PFont minecraft;
